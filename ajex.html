@@ -1,0 +1,112 @@
+<html>
+    <title>Ajex</title>
+    <head></head>
+    <body>
+        <button onclick="getRepos()">Get Repos</button>
+        <button data-page="demo1.html">Get Demo One</button>
+        <button data-page="demo2.html">Get Demo Two</button>
+        <button id="get">GET Ajex API</button>
+        <button id="post">POST Ajex API</button>
+
+        <div id="show"></div>
+        <script src="jquery-3.6.0.min.js"></script>
+        <script>
+            $(function(){
+                $("#post").on("click",function(){
+                    $.post('Auth.php',{name:"Osama" , lastlogin:"yasterday"},function(data, status, xhr){
+                        console.log(data);
+                        console.log(status);
+                        console.log(xhr);
+
+                    })
+                })
+            })
+
+        </script>
+        <!-- <script>
+            $(function(){
+                $("button").on("click",function(){
+                    $.get('Auth.php?name=shimaa&lastlogin=yasterday',function(data, status, xhr){
+                        console.log(data);
+                        console.log(status);
+                        console.log(xhr);
+
+                    })
+                })
+            })
+
+        </script> -->
+        <script>
+            $(function(){
+                $('#show').load('demo1.html .content',function(resText, status, xhr){
+                    console.log(resText);
+                    console.log(status);
+                    console.log(xhr);
+
+                });
+                $('button').on('click',function(){
+                    $('#show').load($(this).data('page') + " .content",function(resText, status, xhr){
+                        if(status === 'success'){
+                            console.log('Data Loaded');
+                        }
+
+                    })
+                })
+            })
+        </script>
+         <!-- <script>
+           $(function(){
+               $('#show').load('shimaa.txt');
+           });
+         </script> -->
+         <script> 
+            //make function to do the Request
+            function getRepos(){
+                // assign the request object to variable
+                var myRequest = new XMLHttpRequest();
+                // On Ready State Change => function called when ready state change
+                myRequest.onreadystatechange = function(){
+                    //console.log(this.readyState);
+                    //console.log(this.status)
+                    /* 
+                    Ready State => the status of the request
+                    [0] Request Not Initialized
+                    [1] Server Connection Established
+                    [2] Request Recieved
+                    [3] Processing Request
+                    [4] Request in finished and Response is ready
+                    */
+
+                    // if request finished and response in ready && status code 200 get response text
+                    if(this.readyState == 4 && this.status == 200){
+                        //console.log(this.responseText);
+                       // console.log(JSON.parse(this.responseText));
+                        //console.log(myRequest);
+
+                        // convert responsetext to js object
+                        var myObject = JSON.parse(this.responseText);
+                            myText = '';
+                        for(var i = 0; i < myObject.length; i++){
+                            console.log(myObject[i].name);
+                            myText = myText + myObject[i].name + '</br>';
+                            console.log(myText);
+                        }
+                        document.getElementById('show').innerHTML = myText;
+                    }
+                };
+
+                //XMLHttpRequest.open('Method', 'url', Async or sync, username, passowrd)
+               // myRequest.open('GET', "https://api.github.com/users/ElzeroWebSchool/repos" ,true);
+               myRequest.open('POST','Auth.php',true);
+               myRequest.setRequestHeader(
+                   "Content-Type",
+                   "application/x-www-form-urlencoded"
+               );
+               myRequest.send("name=Osama&&lastlogin=Today");
+
+            }
+            
+        </script> 
+       
+    </body>
+</html>

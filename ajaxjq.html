@@ -1,0 +1,58 @@
+<html>
+    <head></head>
+    <body>
+          <input type="text" class="mycomment">
+          <button>Get Repos</button>
+          <div id="show"></div>
+          <script src="jquery-3.6.0.min.js"></script>
+          <script>
+              $(function(){
+                  $("button").on("click",function(){
+                      $.ajax({
+                          //type : "post or get" as method 
+                          //cache : false , // cashe the request in browser the default in true
+                          //async : false, Asyncorouns or no 
+                          //timeout : 3000 , // the time needed to start the request ms and difine high periority in requests
+                          //dataType : 'html', //data expected from the server response and the default intel guess
+                          //username : "", // for authentication
+                          //password : "", // for authentication
+                          //contentType : "", // content type for the request, Default is application/x-www-form-urlencoded but 
+                                     //when upload image is multipart/form-data
+                          method : "POST",  // method used to the request
+                          url  : "comments.php", // url to send the request
+                          data : {comment: $(".mycomment").val()}, // data to send with the request
+                          beforeSend : function(xhr){
+                              console.log(`before send ${xhr}`);
+
+                          },
+                          success:function(data, status, xhr){
+                              // function to run when request succeded
+                              console.log(data);
+                              console.log(status);
+                              console.log(xhr); // XHR Object
+                              console.log("success");
+                              $("#show").html(data);
+                              
+
+                          },
+                          error : function(xhr, status, error ){
+                              console.log(xhr); // XHR Object
+                              console.log(status);
+                              console.log(error); // error type
+                              console.log("error");
+
+                          },
+                          complete : function(xhr, status){
+                              // function to run when request complate with success or error
+                              console.log(xhr); // XHR Object
+                              console.log(status);
+                              console.log("complate");
+
+                          }
+                      })
+                  })
+              })
+
+          </script>
+    </body>
+</html>
